@@ -8,7 +8,8 @@ resource "aws_db_instance" "mysql_instance" {
   allocated_storage      = 10
   storage_type           = "gp2"
   username               = "ayesha"
-  password               = "757001Ank$"
+  password               = "757001Ankk"
+  db_subnet_group_name   = aws_db_subnet_group.my_db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
 
   skip_final_snapshot = true
@@ -26,26 +27,9 @@ output "db_instance_username" {
   value = aws_db_instance.mysql_instance.username
 }
 
-
-
-resource "aws_db_instance" "mydb" {
-  instance_class         = "db.t2.micro"
-  engine                 = "mysql" # or "postgres"
-  engine_version         = "8.0"
-  allocated_storage      = 20
-  db_subnet_group_name   = aws_db_subnet_group.my_db_subnet_group.name
-  username               = "dbadmin"
-  password               = "s3cur3pass"
-  vpc_security_group_ids = [aws_security_group.rds_sg.id]
-
-  tags = {
-    Name = "ANKSQLDB"
-  }
-}
-
 resource "aws_db_subnet_group" "my_db_subnet_group" {
   name       = "my_db_subnet_group"
-  subnet_ids = aws_subnet.private_subnet[*].id
+  subnet_ids = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id, aws_subnet.private_subnet_3.id]
 
   tags = {
     Name = "ANKDBSubnetGroup"
